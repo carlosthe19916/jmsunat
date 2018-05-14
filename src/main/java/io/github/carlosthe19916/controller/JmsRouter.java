@@ -1,4 +1,4 @@
-package io.github.carlosthe19916;
+package io.github.carlosthe19916.controller;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -13,17 +13,16 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import java.text.MessageFormat;
-import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
 public class JmsRouter extends RouteBuilder {
 
-    private static final String URI_TEMPLATE = "cxf:{0}?serviceClass={1}&serviceName=urn:{2}";
+    private static final String URI_TEMPLATE = "cxf:${header.SunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.SunatUrn}";
 
     @Inject
-    @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint1")
-    private String defaultSunatEndpoint1;
+    @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
+    private String defaultSunatEndpoint;
 
     @Resource(mappedName = "java:jboss/DefaultJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
@@ -41,8 +40,8 @@ public class JmsRouter extends RouteBuilder {
                 .process(exchange -> {
                     Message message = exchange.getIn();
 
-                    if (message.getHeader("SunatEndpoint1") == null) {
-                        message.setHeader("SunatEndpoint1", defaultSunatEndpoint1);
+                    if (message.getHeader("SunatEndpoint") == null) {
+                        message.setHeader("SunatEndpoint", defaultSunatEndpoint);
                     }
 
                     if (message.getHeader("SunatUrn") == null) {
@@ -56,22 +55,22 @@ public class JmsRouter extends RouteBuilder {
                 })
 
                 .choice()
-                    .when(header("${header.SunatUrn}").isEqualTo("sendBill"))
-                        .toD(generateCfx())
-                    .when(header("${header.SunatUrn}").isEqualTo("getStatus"))
-                        .toD(generateCfx())
-                    .when(header("${header.SunatUrn}").isEqualTo("sendSummary"))
-                        .toD(generateCfx())
-                    .when(header("${header.SunatUrn}").isEqualTo("sendPack"))
-                        .toD(generateCfx())
+                    .when(header("SunatUrn").isEqualTo("sendBill"))
+                        .log("Sending to sendBill...")
+                        .toD(URI_TEMPLATE)
+                    .when(header("SunatUrn").isEqualTo("getStatus"))
+                        .log("Sending to getStatus...")
+                        .toD(URI_TEMPLATE)
+                    .when(header("SunatUrn").isEqualTo("sendSummary"))
+                        .log("Sending to sendSummary...")
+                        .toD(URI_TEMPLATE)
+                    .when(header("SunatUrn").isEqualTo("sendPack"))
+                        .log("Sending to sendPack...")
+                        .toD(URI_TEMPLATE)
                     .otherwise()
                         .log("SunatQueue received invalid message")
                 .end()
         ;
-    }
-
-    private String generateCfx() {
-        return MessageFormat.format(URI_TEMPLATE, "${header.SunatEndpoint1}", pe.gob.sunat.service.BillService.class.getName(), "${header.SunatUrn}");
     }
 
 }

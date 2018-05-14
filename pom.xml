@@ -58,6 +58,21 @@
 
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
+      <artifactId>messaging</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>ejb</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>jsf</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
       <artifactId>camel-core</artifactId>
     </dependency>
 
@@ -115,6 +130,20 @@
       </exclusions>
     </dependency>
 
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>7.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--Primefaces-->
+    <dependency>
+      <groupId>org.primefaces</groupId>
+      <artifactId>primefaces</artifactId>
+      <version>6.2</version>
+    </dependency>
+
     <!--Sunat-->
     <dependency>
       <groupId>io.github.carlosthe19916</groupId>
@@ -140,6 +169,12 @@
         <groupId>org.wildfly.swarm</groupId>
         <artifactId>wildfly-swarm-plugin</artifactId>
         <version>${version.wildfly.swarm}</version>
+        <configuration>
+          <properties>
+            <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
+            <swarm.bind.address>127.0.0.1</swarm.bind.address>
+          </properties>
+        </configuration>
         <executions>
           <execution>
             <goals>
