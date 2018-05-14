@@ -62,6 +62,21 @@
     </dependency>
 
     <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>camel-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>camel-jms</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>camel-cxf</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-client</artifactId>
       <version>${version.resteasy}</version>
@@ -98,6 +113,13 @@
           <artifactId>undertow-core</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!--Sunat-->
+    <dependency>
+      <groupId>io.github.carlosthe19916</groupId>
+      <artifactId>sunat-web-services</artifactId>
+      <version>1.0.2.Final</version>
     </dependency>
   </dependencies>
 
