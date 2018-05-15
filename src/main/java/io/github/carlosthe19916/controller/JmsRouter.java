@@ -22,7 +22,7 @@ import java.util.Optional;
 @ContextName("cdi-camel-context")
 public class JmsRouter extends RouteBuilder {
 
-    private static final String URI_TEMPLATE = "cxf:${header.SunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.SunatUrn}";
+    private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.SunatUrn}";
 
     @Inject
     @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
@@ -39,28 +39,14 @@ public class JmsRouter extends RouteBuilder {
         getContext().addComponent("jms", jmsComponent);
 
         from("jms:queue:SunatQueue")
-                .log("SunatQueue received message")
-
-                .process(exchange -> {
-                    Message message = exchange.getIn();
-
-                    if (message.getHeader("CamelSunatEndpoint") == null) {
-                        message.setHeader("CamelSunatEndpoint", defaultCamelSunatEndpoint);
-                    }
-
-                    if (message.getHeader("SunatUrn") == null) {
-                        Object body = message.getBody();
-                        if (body instanceof String) {
-                            message.setHeader("SunatUrn", "getStatus");
-                        } else if (body instanceof byte[]) {
-                            message.setHeader("SunatUrn", "sendBill");
-                        }
-                    }
-                })
-
                 .choice()
-                    .when(header("SunatUrn").isEqualTo("sendBill"))
-                        .log("Sending to sendBill...")
+                    .when(header("CamelSunatEndpoint").isNull())
+                        .setHeader("CamelSunatEndpoint").simple(defaultCamelSunatEndpoint)
+                .end()
+                .choice()
+                    .when(body().isInstanceOf(String.class))
+                        .toD(URI_TEMPLATE)
+                    .when(body().isInstanceOf(byte[].class))
                         .marshal()
                         .zip()
                         .process(exchange -> {
@@ -80,15 +66,6 @@ public class JmsRouter extends RouteBuilder {
 
                             message.setBody(serviceParams);
                         })
-                        .toD(URI_TEMPLATE)
-                    .when(header("SunatUrn").isEqualTo("getStatus"))
-                        .log("Sending to getStatus...")
-                        .toD(URI_TEMPLATE)
-                    .when(header("SunatUrn").isEqualTo("sendSummary"))
-                        .log("Sending to sendSummary...")
-                        .toD(URI_TEMPLATE)
-                    .when(header("SunatUrn").isEqualTo("sendPack"))
-                        .log("Sending to sendPack...")
                         .toD(URI_TEMPLATE)
                     .otherwise()
                         .log("SunatQueue received invalid message")
