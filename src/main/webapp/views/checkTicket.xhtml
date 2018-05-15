@@ -28,10 +28,9 @@
 
                         <p:outputLabel for="ticket" value="Nro. Ticket: "/>
                         <p:inputText id="ticket" value="#{ticketController.ticket}" required="true"/>
+
+                        <p:commandButton value="Consultar" update="messages" actionListener="#{ticketController.consultarTicket()}"/>
                     </h:panelGrid>
-
-                    <p:commandButton value="Consultar" update="messages" actionListener="#{ticketController.consultarTicket()}"/>
-
                 </h:form>
 
             </h:panelGrid>
