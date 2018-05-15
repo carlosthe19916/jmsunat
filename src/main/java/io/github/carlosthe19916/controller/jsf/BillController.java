@@ -2,7 +2,6 @@ package io.github.carlosthe19916.controller.jsf;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Model;
@@ -21,8 +20,9 @@ public class BillController {
     private Queue queue;
 
     @Inject
-    @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
-    private String endpoint;
+    private ConfigController configController;
+
+    private String tipoComprobante;
 
     public void upload(FileUploadEvent fileUploadEvent) throws JMSException {
         UploadedFile uploadedFile = fileUploadEvent.getFile();
@@ -32,7 +32,11 @@ public class BillController {
 
         BytesMessage bytesMessage = context.createBytesMessage();
         bytesMessage.writeBytes(bytes);
+
         bytesMessage.setStringProperty("CamelFileName", fileName);
+        bytesMessage.setStringProperty("CamelSunatRuc", configController.getRuc());
+        bytesMessage.setStringProperty("CamelSunatEndpoint", configController.getDefaultEndpoint());
+        bytesMessage.setStringProperty("CamelSunatTipoComprobante", tipoComprobante);
 
         context.createProducer().send(queue, bytesMessage);
 
@@ -40,4 +44,13 @@ public class BillController {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    // Getter and Setters
+
+    public String getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
 }

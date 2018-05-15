@@ -19,8 +19,7 @@ public class TicketController {
     private Queue queue;
 
     @Inject
-    @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
-    private String endpoint;
+    private ConfigController configController;
 
     private String ticket;
 
@@ -28,20 +27,14 @@ public class TicketController {
         context.createProducer().send(queue, this.ticket);
     }
 
+    // Getters and Setters
+
     public String getTicket() {
         return ticket;
     }
 
     public void setTicket(String ticket) {
         this.ticket = ticket;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 
 }

@@ -8,11 +8,15 @@ import org.apache.camel.cdi.ContextName;
 import org.apache.camel.component.jms.JmsComponent;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
+import javax.mail.util.ByteArrayDataSource;
 import java.text.MessageFormat;
+import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
@@ -22,7 +26,7 @@ public class JmsRouter extends RouteBuilder {
 
     @Inject
     @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
-    private String defaultSunatEndpoint;
+    private String defaultCamelSunatEndpoint;
 
     @Resource(mappedName = "java:jboss/DefaultJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
@@ -40,8 +44,8 @@ public class JmsRouter extends RouteBuilder {
                 .process(exchange -> {
                     Message message = exchange.getIn();
 
-                    if (message.getHeader("SunatEndpoint") == null) {
-                        message.setHeader("SunatEndpoint", defaultSunatEndpoint);
+                    if (message.getHeader("CamelSunatEndpoint") == null) {
+                        message.setHeader("CamelSunatEndpoint", defaultCamelSunatEndpoint);
                     }
 
                     if (message.getHeader("SunatUrn") == null) {
@@ -57,6 +61,25 @@ public class JmsRouter extends RouteBuilder {
                 .choice()
                     .when(header("SunatUrn").isEqualTo("sendBill"))
                         .log("Sending to sendBill...")
+                        .marshal()
+                        .zip()
+                        .process(exchange -> {
+                            Message message = exchange.getIn();
+
+                            String ruc = (String) message.getHeader("CamelSunatRuc");
+                            String tipoComprobante = (String) message.getHeader("CamelSunatTipoComprobante");
+
+                            String fileName = (String) message.getHeader("CamelFileName");
+                            byte[] bytes = (byte[]) message.getBody();
+                            String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
+
+                            DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
+                            DataHandler dataHandler = new DataHandler(dataSource);
+
+                            Object[] serviceParams = new Object[]{ruc + "-" + tipoComprobante + "-" + fileName.replaceAll(".xml", ".zip"), dataHandler, partyType};
+
+                            message.setBody(serviceParams);
+                        })
                         .toD(URI_TEMPLATE)
                     .when(header("SunatUrn").isEqualTo("getStatus"))
                         .log("Sending to getStatus...")
