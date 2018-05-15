@@ -148,17 +148,12 @@
     </dependency>
 
     <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-transports-http</artifactId>
-        <version>3.1.9</version>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-bindings-soap</artifactId>
-      <version>3.1.9</version>
+      <version>2.7.18</version>
       <scope>provided</scope>
     </dependency>
+
 
     <!--Primefaces-->
     <dependency>
