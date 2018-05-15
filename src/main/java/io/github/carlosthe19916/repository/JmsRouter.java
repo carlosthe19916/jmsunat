@@ -1,8 +1,6 @@
-package io.github.carlosthe19916.controller;
+package io.github.carlosthe19916.repository;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ContextName;
 import org.apache.camel.component.jms.JmsComponent;
@@ -15,14 +13,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import javax.mail.util.ByteArrayDataSource;
-import java.text.MessageFormat;
 import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
 public class JmsRouter extends RouteBuilder {
 
-    private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.SunatUrn}";
+    private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.CamelSunatOperation}";
 
     @Inject
     @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
@@ -45,6 +42,7 @@ public class JmsRouter extends RouteBuilder {
                 .end()
                 .choice()
                     .when(body().isInstanceOf(String.class))
+                        .setHeader("CamelSunatOperation").simple("getStatus")
                         .toD(URI_TEMPLATE)
                     .when(body().isInstanceOf(byte[].class))
                         .marshal()

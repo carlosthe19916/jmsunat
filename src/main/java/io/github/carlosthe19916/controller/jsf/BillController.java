@@ -2,6 +2,7 @@ package io.github.carlosthe19916.controller.jsf;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Model;
@@ -20,9 +21,11 @@ public class BillController {
     private Queue queue;
 
     @Inject
-    private ConfigController configController;
+    @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
+    private String endpoint;
 
-    private String tipoComprobante;
+    private String username = "MODDATOS";
+    private String password = "MODDATOS";
 
     public void upload(FileUploadEvent fileUploadEvent) throws JMSException {
         UploadedFile uploadedFile = fileUploadEvent.getFile();
@@ -34,9 +37,9 @@ public class BillController {
         bytesMessage.writeBytes(bytes);
 
         bytesMessage.setStringProperty("CamelFileName", fileName);
-        bytesMessage.setStringProperty("CamelSunatRuc", configController.getRuc());
-        bytesMessage.setStringProperty("CamelSunatEndpoint", configController.getDefaultEndpoint());
-        bytesMessage.setStringProperty("CamelSunatTipoComprobante", tipoComprobante);
+        bytesMessage.setStringProperty("CamelSunatEndpoint", endpoint);
+        bytesMessage.setStringProperty("CamelSunatUsername", username);
+        bytesMessage.setStringProperty("CamelSunatPassword", password);
 
         context.createProducer().send(queue, bytesMessage);
 
@@ -46,11 +49,27 @@ public class BillController {
 
     // Getter and Setters
 
-    public String getTipoComprobante() {
-        return tipoComprobante;
+    public String getEndpoint() {
+        return endpoint;
     }
 
-    public void setTipoComprobante(String tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

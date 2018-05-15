@@ -1,4 +1,4 @@
-package io.github.carlosthe19916.controller;
+package io.github.carlosthe19916.controller.rest;
 
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
