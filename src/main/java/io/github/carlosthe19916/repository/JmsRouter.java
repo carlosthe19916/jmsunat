@@ -77,25 +77,28 @@ public class JmsRouter extends RouteBuilder {
                             message.setBody(statusResponse);
                         })
                     .when(body().isInstanceOf(byte[].class))
-                        .marshal()
-                        .zip()
+                        .convertBodyTo(Document.class)
                         .process(exchange -> {
-                            Message message = exchange.getIn();
 
-                            String ruc = (String) message.getHeader("CamelSunatRuc");
-                            String tipoComprobante = (String) message.getHeader("CamelSunatTipoComprobante");
 
-                            String fileName = (String) message.getHeader("CamelFileName");
-                            byte[] bytes = (byte[]) message.getBody();
-                            String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
-
-                            DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
-                            DataHandler dataHandler = new DataHandler(dataSource);
-
-                            Object[] serviceParams = new Object[]{ruc + "-" + tipoComprobante + "-" + fileName.replaceAll(".xml", ".zip"), dataHandler, partyType};
-
-                            message.setBody(serviceParams);
+//                            Message message = exchange.getIn();
+//
+//                            String ruc = (String) message.getHeader("CamelSunatRuc");
+//                            String tipoComprobante = (String) message.getHeader("CamelSunatTipoComprobante");
+//
+//                            String fileName = (String) message.getHeader("CamelFileName");
+//                            byte[] bytes = (byte[]) message.getBody();
+//                            String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
+//
+//                            DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
+//                            DataHandler dataHandler = new DataHandler(dataSource);
+//
+//                            Object[] serviceParams = new Object[]{ruc + "-" + tipoComprobante + "-" + fileName.replaceAll(".xml", ".zip"), dataHandler, partyType};
+//
+//                            message.setBody(serviceParams);
                         })
+//                        .marshal()
+//                        .zip()
                         .toD(URI_TEMPLATE)
                     .otherwise()
                         .log("SunatQueue received invalid message")
