@@ -1,4 +1,4 @@
-package io.github.carlosthe19916.ubl;
+package io.github.carlosthe19916.model;
 
 import org.w3c.dom.Document;
 

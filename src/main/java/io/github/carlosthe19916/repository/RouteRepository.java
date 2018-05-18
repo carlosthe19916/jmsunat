@@ -7,7 +7,7 @@ import org.apache.camel.model.language.HeaderExpression;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RouteBuilderA extends RouteBuilder {
+public class RouteRepository extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -20,7 +20,7 @@ public class RouteBuilderA extends RouteBuilder {
                         System.out.println("Writing " + exchange + " to " + System.getProperty("jboss.server.data.dir"));
                     }
                 })
-                .to("file://{{jboss.server.data.dir}}/" + RouteBuilderA.class.getName() + "?fileName=fileA&doneFileName=fileA.done");
+                .to("file://{{jboss.server.data.dir}}/" + RouteRepository.class.getName() + "?fileName=fileA&doneFileName=fileA.done");
     }
 
 }

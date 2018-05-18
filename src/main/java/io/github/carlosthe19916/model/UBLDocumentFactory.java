@@ -1,9 +1,13 @@
-package io.github.carlosthe19916.ubl;
+package io.github.carlosthe19916.model;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class UBLDocumentFactory {
+
+    private UBLDocumentFactory() {
+        // Use static methods only
+    }
 
     public static UBLDocument getUBLDocument(Document document) {
         Element documentElement = document.getDocumentElement();

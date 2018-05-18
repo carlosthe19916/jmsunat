@@ -1,4 +1,4 @@
-package io.github.carlosthe19916.ubl;
+package io.github.carlosthe19916.model;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,16 +13,14 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
-
-public class UBLCreditNoteDocumentTest {
+public class UBLInvoiceDocumentTest {
 
     private Document document;
 
     @Before
     public void before() throws ParserConfigurationException, IOException, SAXException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("ubl/F001-00000007.xml").getFile());
+        File file = new File(classLoader.getResource("ubl/F001-00005925.xml").getFile());
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         dbFactory.setNamespaceAware(true);
@@ -35,8 +33,9 @@ public class UBLCreditNoteDocumentTest {
         UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
 
         Assert.assertNotNull(ublDocument);
-        Assert.assertEquals("F001-00000007", ublDocument.getIDAsignado());
+        Assert.assertEquals("F001-00005925", ublDocument.getIDAsignado());
         Assert.assertEquals("20494637074", ublDocument.getNumeroRucEmisor());
-        Assert.assertEquals("07", ublDocument.getCodigoTipoDocumento());
+        Assert.assertEquals("01", ublDocument.getCodigoTipoDocumento());
     }
+
 }

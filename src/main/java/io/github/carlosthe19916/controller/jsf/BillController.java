@@ -1,24 +1,22 @@
 package io.github.carlosthe19916.controller.jsf;
 
+import io.github.carlosthe19916.model.SendConfig;
+import io.github.carlosthe19916.service.SunatService;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
-import javax.annotation.Resource;
 import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.jms.*;
+import javax.jms.JMSException;
 
 @Model
 public class BillController {
 
     @Inject
-    private JMSContext context;
-
-    @Resource(lookup = "/jms/queue/SunatQueue")
-    private Queue queue;
+    private SunatService sunatService;
 
     @Inject
     @ConfigurationValue("io.github.carlosthe19916.defaultSunatEndpoint")
@@ -33,15 +31,12 @@ public class BillController {
         byte[] bytes = uploadedFile.getContents();
         String fileName = uploadedFile.getFileName();
 
-        BytesMessage bytesMessage = context.createBytesMessage();
-        bytesMessage.writeBytes(bytes);
-
-        bytesMessage.setStringProperty("CamelFileName", fileName);
-        bytesMessage.setStringProperty("CamelSunatEndpoint", endpoint);
-        bytesMessage.setStringProperty("CamelSunatUsername", username);
-        bytesMessage.setStringProperty("CamelSunatPassword", password);
-
-        context.createProducer().send(queue, bytesMessage);
+        SendConfig sendConfig = new SendConfig.Builder()
+                .endpoint(endpoint)
+                .username(username)
+                .password(password)
+                .build();
+        sunatService.sendFile(sendConfig, bytes);
 
         FacesMessage message = new FacesMessage("Succesful", fileName + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);

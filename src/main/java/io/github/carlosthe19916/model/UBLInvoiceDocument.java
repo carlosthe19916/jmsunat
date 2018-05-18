@@ -1,10 +1,9 @@
-package io.github.carlosthe19916.ubl;
+package io.github.carlosthe19916.model;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.SimpleInvoiceNamespaceContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;

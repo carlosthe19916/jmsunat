@@ -1,4 +1,4 @@
-package io.github.carlosthe19916.ubl;
+package io.github.carlosthe19916.model;
 
 import org.junit.Assert;
 import org.junit.Before;
