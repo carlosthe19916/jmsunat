@@ -9,5 +9,5 @@ io:
   github:
     carlosthe19916:
       jms:
-        sunatQueue: "/jms/queue/SunatQueue"
+        sunatQueue: "/jms/queue/SimpleSunatQueue"
       defaultSunatEndpoint: "https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService"

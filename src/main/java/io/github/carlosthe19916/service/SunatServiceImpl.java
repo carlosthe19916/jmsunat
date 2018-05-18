@@ -1,20 +1,32 @@
 package io.github.carlosthe19916.service;
 
 import io.github.carlosthe19916.model.SendConfig;
+import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
-import javax.annotation.Resource;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 @ApplicationScoped
 public class SunatServiceImpl implements SunatService {
 
     @Inject
+    @ConfigurationValue("io.github.carlosthe19916.jms.sunatQueue")
+    private String sunatQueue;
+
+    @Inject
     private JMSContext context;
 
-    @Resource(lookup = "/jms/queue/SunatQueue")
     private Queue queue;
+
+    @PostConstruct
+    private void init() throws NamingException {
+        InitialContext initialContext = new InitialContext();
+        queue = (Queue) initialContext.lookup(sunatQueue);
+    }
 
     @Override
     public void sendFile(SendConfig sendConfig, byte[] bytes) throws JMSException {
