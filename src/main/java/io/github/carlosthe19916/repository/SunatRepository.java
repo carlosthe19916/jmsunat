@@ -1,7 +1,10 @@
 package io.github.carlosthe19916.repository;
 
+import io.github.carlosthe19916.model.UBLDocument;
+import io.github.carlosthe19916.model.UBLDocumentFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ContextName;
 import org.apache.camel.component.jms.JmsComponent;
@@ -16,10 +19,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import pe.gob.sunat.service.StatusResponse;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
+import javax.mail.util.ByteArrayDataSource;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,6 +35,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
@@ -53,13 +60,11 @@ public class SunatRepository extends RouteBuilder {
         from("jms:queue:SunatQueue")
                 .choice()
                     .when(header("CamelSunatEndpoint").isNull())
-                        .log("CamelSunatEndpoint is not present, setting default:" + defaultCamelSunatEndpoint)
                         .setHeader("CamelSunatEndpoint").simple(defaultCamelSunatEndpoint)
                 .end()
                 .choice()
                     .when(body().isInstanceOf(String.class))
                         .setHeader("CamelSunatOperation").simple("getStatus")
-                        .log("Checking ticket: ${body} on ruc: ${header.CamelSunatRuc}")
                         .process(exchange -> {
                             String ruc = (String) exchange.getIn().getHeader("CamelSunatRuc");
                             this.addWSSESecurityHeader(exchange, ruc);
@@ -72,29 +77,53 @@ public class SunatRepository extends RouteBuilder {
                             message.setBody(statusResponse);
                         })
                     .when(body().isInstanceOf(byte[].class))
+                        .setHeader("CamelSunatOperation").simple("sendBill")
                         .convertBodyTo(Document.class)
-                        .process(exchange -> {
+                        .choice()
+                            .when(exchange -> {
+                                Message message = exchange.getIn();
+                                Document document = (Document) message.getBody();
+                                UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
+                                return ublDocument != null;
+                            })
+                                .process(exchange -> {
+                                    Message message = exchange.getIn();
+                                    Document document = (Document) message.getBody();
+                                    UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
 
+                                    message.setHeader("CamelSunatRuc", ublDocument.getNumeroRucEmisor());
+                                    message.setHeader("CamelSunatTipoComprobante", ublDocument.getCodigoTipoDocumento());
+                                    message.setHeader("CamelSunatIdAsignado", ublDocument.getIDAsignado());
 
-//                            Message message = exchange.getIn();
-//
-//                            String ruc = (String) message.getHeader("CamelSunatRuc");
-//                            String tipoComprobante = (String) message.getHeader("CamelSunatTipoComprobante");
-//
-//                            String fileName = (String) message.getHeader("CamelFileName");
-//                            byte[] bytes = (byte[]) message.getBody();
-//                            String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
-//
-//                            DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
-//                            DataHandler dataHandler = new DataHandler(dataSource);
-//
-//                            Object[] serviceParams = new Object[]{ruc + "-" + tipoComprobante + "-" + fileName.replaceAll(".xml", ".zip"), dataHandler, partyType};
-//
-//                            message.setBody(serviceParams);
-                        })
-//                        .marshal()
-//                        .zip()
-                        .toD(URI_TEMPLATE)
+                                    String fileName = ublDocument.getNumeroRucEmisor() + "-" +
+                                            ublDocument.getCodigoTipoDocumento() + "-" +
+                                            ublDocument.getIDAsignado() + ".xml";
+                                    message.setHeader(Exchange.FILE_NAME, fileName);
+                                })
+                                .marshal()
+                                .zipFile()
+                                .process(exchange -> {
+                                    Message message = exchange.getIn();
+
+                                    byte[] bytes = (byte[]) message.getBody();
+                                    String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
+
+                                    DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
+
+                                    String camelFinalName = (String) message.getHeader(Exchange.FILE_NAME);
+                                    camelFinalName = camelFinalName.replaceAll(".xml", "");
+
+                                    DataHandler dataHandler = new DataHandler(dataSource);
+                                    Object[] serviceParams = new Object[]{camelFinalName, dataHandler, partyType};
+                                    message.setBody(serviceParams);
+                                })
+                                .process(exchange -> {
+                                    String ruc = (String) exchange.getIn().getHeader("CamelSunatRuc");
+                                    this.addWSSESecurityHeader(exchange, ruc);
+                                })
+                                .toD(URI_TEMPLATE)
+                        .otherwise()
+                            .log("SunatQueue received invalid message")
                     .otherwise()
                         .log("SunatQueue received invalid message")
                     .end()
