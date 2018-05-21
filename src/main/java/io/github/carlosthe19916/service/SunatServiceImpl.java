@@ -37,7 +37,14 @@ public class SunatServiceImpl implements SunatService {
         bytesMessage.setStringProperty("CamelSunatUsername", sendConfig.getUsername());
         bytesMessage.setStringProperty("CamelSunatPassword", sendConfig.getPassword());
 
-        context.createProducer().send(queue, bytesMessage);
+        JMSProducer producer = context.createProducer();
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        producer.setTimeToLive(0);
+
+//        TemporaryQueue temporaryQueue = context.createTemporaryQueue();
+//        producer.setJMSReplyTo(temporaryQueue);
+
+        producer.send(queue, bytesMessage);
     }
 
     @Override
@@ -49,7 +56,14 @@ public class SunatServiceImpl implements SunatService {
         textMessage.setStringProperty("CamelSunatUsername", sendConfig.getUsername());
         textMessage.setStringProperty("CamelSunatPassword", sendConfig.getPassword());
 
-        context.createProducer().send(queue, textMessage);
+        JMSProducer producer = context.createProducer();
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        producer.setTimeToLive(0);
+
+//        TemporaryQueue temporaryQueue = context.createTemporaryQueue();
+//        producer.setJMSReplyTo(temporaryQueue);
+
+        producer.send(queue, textMessage);
     }
 
 }
