@@ -32,7 +32,7 @@
   <name>WildFly Swarm Booster - REST API Level 0 Mission</name>
 
   <properties>
-    <version.wildfly.swarm>2018.5.0</version.wildfly.swarm>
+    <version.wildfly.swarm>2018.4.1</version.wildfly.swarm>
     <version.resteasy>3.0.24.Final</version.resteasy>
     <version.restassured>3.0.7</version.restassured>
     <version.awaitility>3.1.0</version.awaitility>
@@ -64,6 +64,10 @@
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
       <artifactId>ejb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>ejb-remote</artifactId>
     </dependency>
 
     <dependency>
