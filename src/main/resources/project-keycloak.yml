@@ -1,4 +1,12 @@
 swarm:
+  deployment:
+    sunat-jms-thorntail.war:
+      web:
+        login-config:
+          auth-method: KEYCLOAK
+        security-constraints:
+          - url-pattern: /*
+            roles: [admin, user]
   bind:
     address: 0.0.0.0
   network:
@@ -34,5 +42,5 @@ io:
   github:
     carlosthe19916:
       jms:
-        sunatQueue: "java:/jms/queue/SunatQueue"
+        sunatQueue: "jms/queue/SunatQueue"
       defaultSunatEndpoint: "https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService"
