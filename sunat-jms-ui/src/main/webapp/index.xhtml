@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+
+    <p:layout fullPage="true" style="min-width:400px; min-height:200px;">
+        <p:layoutUnit position="north" header="CARLOSTHE19916 - SUNAT">
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" resizable="true" collapsible="true" header="MENU">
+            <h:form>
+                <p:menu>
+                    <p:submenu label="Operaciones">
+                        <p:menuitem value="Crear" update="messages" icon="ui-icon-disk"/>
+                    </p:submenu>
+                </p:menu>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center">
+            <p:growl id="messages" showDetail="true"/>
+
+            <p:panel id="basic" header="Datos Generales" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <h:form>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputLabel for="defaultEndpoint" value="Default serviceUrl: "/>
+                            <p:inputText id="defaultEndpoint" value="#{configController.defaultEndpoint}"
+                                         required="true"/>
+                            <h:outputLabel for="ruc" value="Nro. Ruc: "/>
+                            <p:inputText id="ruc" value="#{configController.ruc}" required="true"/>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </p:panel>
+
+            <p:tabView>
+                <p:tab title="Enviar XML">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:form>
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:fileUpload fileUploadListener="#{billController.upload}" mode="advanced"
+                                              skinSimple="true" dragDropSupport="false" update="messages"
+                                              sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Consultar Ticket">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:form>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel for="ticket" value="Nro. Ticket: "/>
+                                <p:inputText id="ticket" value="#{ticketController.ticket}" required="true"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Consultar" update="messages"
+                                             actionListener="#{ticketController.consultarTicket()}"/>
+                        </h:form>
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+        </p:layoutUnit>
+    </p:layout>
+
+</h:body>
+</html>
