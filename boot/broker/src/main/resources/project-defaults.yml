@@ -1,0 +1,31 @@
+swarm:
+  bind:
+    address: 0.0.0.0
+  network:
+    socket-binding-groups:
+      standard-sockets:
+        socket-bindings:
+          activemq:
+            port: 61616
+  messaging-activemq:
+    servers:
+      default:
+        jms-queues:
+          sunat-queue:
+            entries:
+              entry: "java:/jms/queue/sunat-queue java:/jboss/exported/jms/queue/sunat-queue"
+        security-enabled: false
+        remote-acceptors:
+            netty-acceptor:
+              socket-binding: activemq
+        remote-connectors:
+            netty-connector:
+              socket-binding: activemq
+        http-connectors:
+          http-connector:
+            socket-binding: http
+            endpoint: http-acceptor
+        http-acceptors:
+          http-acceptor:
+            http-listener: default
+        jmx-management-enabled: true

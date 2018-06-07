@@ -69,13 +69,13 @@
     </distributionManagement>
 
     <modules>
-        <module>sunat-jms-core</module>
-        <module>sunat-jms-sender</module>
-        <module>sunat-jms-consumer</module>
-        <module>sunat-jms-rest</module>
-        <module>sunat-jms-ui</module>
-        <module>sunat-jms-wildfly-swarm-config</module>
-        <module>sunat-jms-boot</module>
+        <module>core</module>
+        <module>sender</module>
+        <module>consumer</module>
+        <module>rest</module>
+        <module>ui</module>
+        <module>wildfly-swarm-config</module>
+        <module>boot</module>
     </modules>
 
     <dependencyManagement>
@@ -91,6 +91,16 @@
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
                 <artifactId>sunat-jms-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.carlosthe19916</groupId>
+                <artifactId>sunat-jms-sender</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.carlosthe19916</groupId>
+                <artifactId>sunat-jms-consumer</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
