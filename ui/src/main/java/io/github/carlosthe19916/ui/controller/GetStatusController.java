@@ -1,6 +1,5 @@
-package io.github.carlosthe19916.jsf.controller;
+package io.github.carlosthe19916.ui.controller;
 
-import io.github.carlosthe19916.config.BillServiceCpeUrl;
 import io.github.carlosthe19916.sender.model.SenderConfig;
 import io.github.carlosthe19916.sender.service.BillService;
 
@@ -16,8 +15,6 @@ public class GetStatusController {
     @Inject
     private BillService billService;
 
-    @Inject
-    @BillServiceCpeUrl
     private String serviceUrl;
     private String username;
     private String password;
