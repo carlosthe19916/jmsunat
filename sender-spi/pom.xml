@@ -15,23 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jaxrs</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>cdi</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>arquillian</artifactId>
-            <scope>test</scope>
+            <artifactId>jmsunat-core</artifactId>
         </dependency>
     </dependencies>
 </project>
