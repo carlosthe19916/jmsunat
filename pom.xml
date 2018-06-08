@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>io.openshift</groupId>
         <artifactId>booster-parent</artifactId>
@@ -9,11 +8,12 @@
     </parent>
 
     <groupId>io.github.carlosthe19916</groupId>
-    <artifactId>sunat-jms</artifactId>
+    <artifactId>jmsunat</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>SUNAT JMS</name>
+    <name>JMSunat</name>
+    <description>JMS for SUNAT</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -52,9 +52,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/carlosthe19916/sunat-jms-thorntail.git</connection>
-        <developerConnection>scm:git:git@github.com:carlosthe19916/sunat-jms-thorntail.git</developerConnection>
-        <url>https://github.com/carlosthe19916/sunat-jms-thorntail/tree/master/</url>
+        <connection>scm:git:git://github.com/carlosthe19916/jmsunat.git</connection>
+        <developerConnection>scm:git:git@github.com:carlosthe19916/jmsunat.git</developerConnection>
+        <url>https://github.com/carlosthe19916/jmsunat/tree/master/</url>
     </scm>
 
     <distributionManagement>
@@ -70,12 +70,6 @@
 
     <modules>
         <module>core</module>
-        <module>sender-spi</module>
-        <module>consumer</module>
-        <module>rest</module>
-        <module>ui</module>
-        <module>wildfly-swarm</module>
-        <module>boot</module>
     </modules>
 
     <dependencyManagement>
@@ -90,34 +84,34 @@
 
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-core</artifactId>
+                <artifactId>jmsunat-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-sender</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-consumer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-rest</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-wildfly-swarm-config</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>io.github.carlosthe19916</groupId>-->
+                <!--<artifactId>jmsunat-sender-spi</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>io.github.carlosthe19916</groupId>-->
+                <!--<artifactId>sunat-jms-consumer</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>io.github.carlosthe19916</groupId>-->
+                <!--<artifactId>sunat-jms-rest</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>io.github.carlosthe19916</groupId>-->
+                <!--<artifactId>sunat-jms-ui</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>io.github.carlosthe19916</groupId>-->
+                <!--<artifactId>sunat-jms-wildfly-swarm-config</artifactId>-->
+                <!--<version>${project.version}</version>-->
+            <!--</dependency>-->
         </dependencies>
     </dependencyManagement>
 
