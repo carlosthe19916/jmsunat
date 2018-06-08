@@ -7,14 +7,18 @@ swarm:
         socket-bindings:
           activemq:
             port: 61616
+  messaging:
+    remote:
+      name: remote-mq
+      host: 0.0.0.0
+      port: 61616
+      jndi-name: java:/jms/remote-mq
+  remote: true
   messaging-activemq:
     servers:
       default:
         jms-queues:
-          SunatQueue:
-            entries:
-              entry: "java:/jms/queue/SunatQueue java:/jboss/exported/jms/queue/SunatQueue"
-          SimpleSunatQueue: {}
+          sunat-queue: {}
         security-enabled: false
         remote-acceptors:
             netty-acceptor:
@@ -33,6 +37,5 @@ swarm:
 io:
   github:
     carlosthe19916:
-      jms:
-        sunatQueue: "java:/jms/queue/SunatQueue"
-      defaultSunatEndpoint: "https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService"
+      ws:
+        billServiceCpeUrl: "https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService"

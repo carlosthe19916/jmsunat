@@ -4,8 +4,6 @@ import io.github.carlosthe19916.config.BillServiceCpeUrl;
 import io.github.carlosthe19916.jms.consumer.model.WSConstants;
 import io.github.carlosthe19916.jms.consumer.utils.Utils;
 import io.github.carlosthe19916.model.Constants;
-import io.github.carlosthe19916.model.UBLDocument;
-import io.github.carlosthe19916.model.UBLDocumentFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.builder.RouteBuilder;
@@ -14,30 +12,17 @@ import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.util.CastUtils;
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.headers.Header;
-import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.message.MessageContentsList;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import pe.gob.sunat.service.StatusResponse;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
-import javax.mail.util.ByteArrayDataSource;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
@@ -45,7 +30,7 @@ public class ConsumerService extends RouteBuilder {
 
     private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" +
             pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header." +
-            WSConstants.SUNAT_WS_OPERATION + "}";
+            WSConstants.WS_OPERATION + "}";
 
     @Inject
     @BillServiceCpeUrl
@@ -62,14 +47,10 @@ public class ConsumerService extends RouteBuilder {
         getContext().addComponent("jms", jmsComponent);
 
         from("jms:queue:sunat-queue")
-                .choice()
-                    .when(header(Constants.SUNAT_JMS_SERVICE_URL).isNull())
-                        .setHeader(Constants.SUNAT_JMS_SERVICE_URL).simple(defaultServiceUrl)
-                .end()
                 .process(this::addWSSESecurityHeader)
                 .choice()
-                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_GET_STATUS))
-                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_GET_STATUS_OPERATION)
+                    .when(header(Constants.OPERATION_NAME).isEqualTo(Constants.OPERATION_GET_STATUS))
+                        .setHeader(WSConstants.WS_OPERATION).simple(WSConstants.WS_GET_STATUS)
                         .toD(URI_TEMPLATE)
                         .process(exchange -> {
                             Message message = exchange.getIn();
@@ -77,73 +58,72 @@ public class ConsumerService extends RouteBuilder {
                             StatusResponse statusResponse = (StatusResponse) messageContentsList.get(0);
                             message.setBody(statusResponse);
                         })
-                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_BILL))
-                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_BILL_OPERATION)
-                        .toD(URI_TEMPLATE)
-                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_SUMMARY))
-                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_SUMMARY_OPERATION)
-                        .toD(URI_TEMPLATE)
-                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_PACK))
-                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_PACK_OPERATION)
-                        .toD(URI_TEMPLATE)
-
-                    .when(body().isInstanceOf(String.class))
-                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_GET_STATUS_OPERATION)
-                        .toD(URI_TEMPLATE)
-                        .process(exchange -> {
-                            Message message = exchange.getIn();
-                            MessageContentsList messageContentsList = (MessageContentsList) message.getBody();
-                            StatusResponse statusResponse = (StatusResponse) messageContentsList.get(0);
-                            message.setBody(statusResponse);
-                        })
-                    .when(body().isInstanceOf(byte[].class))
-                        .setHeader("CamelSunatOperation").simple("sendBill")
-                        .convertBodyTo(Document.class)
-                        .choice()
-                            .when(exchange -> {
-                                Message message = exchange.getIn();
-                                Document document = (Document) message.getBody();
-                                UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
-                                return ublDocument != null;
-                            })
-                                .process(exchange -> {
-                                    Message message = exchange.getIn();
-                                    Document document = (Document) message.getBody();
-                                    UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
-
-                                    message.setHeader("CamelSunatRuc", ublDocument.getNumeroRucEmisor());
-                                    message.setHeader("CamelSunatTipoComprobante", ublDocument.getCodigoTipoDocumento());
-                                    message.setHeader("CamelSunatIdAsignado", ublDocument.getIDAsignado());
-
-                                    String fileName = ublDocument.getNumeroRucEmisor() + "-" +
-                                            ublDocument.getCodigoTipoDocumento() + "-" +
-                                            ublDocument.getIDAsignado() + ".xml";
-                                    message.setHeader(Exchange.FILE_NAME, fileName);
-                                })
-                                .marshal()
-                                .zipFile()
-                                .process(exchange -> {
-                                    Message message = exchange.getIn();
-
-                                    byte[] bytes = (byte[]) message.getBody();
-                                    String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
-
-                                    DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
-
-                                    String camelFinalName = (String) message.getHeader(Exchange.FILE_NAME);
-                                    camelFinalName = camelFinalName.replaceAll(".xml", "");
-
-                                    DataHandler dataHandler = new DataHandler(dataSource);
-                                    Object[] serviceParams = new Object[]{camelFinalName, dataHandler, partyType};
-                                    message.setBody(serviceParams);
-                                })
-                                .toD(URI_TEMPLATE)
-                        .otherwise()
-                            .log("sunat-queue received invalid message")
+//                    .when(header(Constants.OPERATION_NAME).isEqualTo(Constants.OPERATION_SEND_BILL))
+//                        .setHeader(WSConstants.WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_BILL_OPERATION)
+//                        .toD(URI_TEMPLATE)
+//                    .when(header(Constants.OPERATION_NAME).isEqualTo(Constants.OPERATION_SEND_SUMMARY))
+//                        .setHeader(WSConstants.WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_SUMMARY_OPERATION)
+//                        .toD(URI_TEMPLATE)
+//                    .when(header(Constants.OPERATION_NAME).isEqualTo(Constants.OPERATION_SEND_PACK))
+//                        .setHeader(WSConstants.WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_PACK_OPERATION)
+//                        .toD(URI_TEMPLATE)
+//
+//                    .when(body().isInstanceOf(String.class))
+//                        .setHeader(WSConstants.WS_OPERATION).simple(WSConstants.WS_GET_STATUS)
+//                        .toD(URI_TEMPLATE)
+//                        .process(exchange -> {
+//                            Message message = exchange.getIn();
+//                            MessageContentsList messageContentsList = (MessageContentsList) message.getBody();
+//                            StatusResponse statusResponse = (StatusResponse) messageContentsList.get(0);
+//                            message.setBody(statusResponse);
+//                        })
+//                    .when(body().isInstanceOf(byte[].class))
+//                        .setHeader("CamelSunatOperation").simple("sendBill")
+//                        .convertBodyTo(Document.class)
+//                        .choice()
+//                            .when(exchange -> {
+//                                Message message = exchange.getIn();
+//                                Document document = (Document) message.getBody();
+//                                UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
+//                                return ublDocument != null;
+//                            })
+//                                .process(exchange -> {
+//                                    Message message = exchange.getIn();
+//                                    Document document = (Document) message.getBody();
+//                                    UBLDocument ublDocument = UBLDocumentFactory.getUBLDocument(document);
+//
+//                                    message.setHeader("CamelSunatRuc", ublDocument.getNumeroRucEmisor());
+//                                    message.setHeader("CamelSunatTipoComprobante", ublDocument.getCodigoTipoDocumento());
+//                                    message.setHeader("CamelSunatIdAsignado", ublDocument.getIDAsignado());
+//
+//                                    String fileName = ublDocument.getNumeroRucEmisor() + "-" +
+//                                            ublDocument.getCodigoTipoDocumento() + "-" +
+//                                            ublDocument.getIDAsignado() + ".xml";
+//                                    message.setHeader(Exchange.FILE_NAME, fileName);
+//                                })
+//                                .marshal()
+//                                .zipFile()
+//                                .process(exchange -> {
+//                                    Message message = exchange.getIn();
+//
+//                                    byte[] bytes = (byte[]) message.getBody();
+//                                    String partyType = (String) Optional.ofNullable(message.getHeader("SunatPartyType")).orElse("");
+//
+//                                    DataSource dataSource = new ByteArrayDataSource(bytes, "application/xml");
+//
+//                                    String camelFinalName = (String) message.getHeader(Exchange.FILE_NAME);
+//                                    camelFinalName = camelFinalName.replaceAll(".xml", "");
+//
+//                                    DataHandler dataHandler = new DataHandler(dataSource);
+//                                    Object[] serviceParams = new Object[]{camelFinalName, dataHandler, partyType};
+//                                    message.setBody(serviceParams);
+//                                })
+//                                .toD(URI_TEMPLATE)
+//                        .otherwise()
+//                            .log("sunat-queue received invalid message")
                     .otherwise()
                         .log("sunat-queue received invalid message")
-                    .end()
-        ;
+                    .end();
     }
 
     private void addWSSESecurityHeader(Exchange exchange) {

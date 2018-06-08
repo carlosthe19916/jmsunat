@@ -15,5 +15,6 @@
         <module>broker</module>
         <module>consumer</module>
         <module>sender</module>
+        <module>all-in-one</module>
     </modules>
 </project>

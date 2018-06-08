@@ -20,7 +20,7 @@ public class Constants {
     public static final String IMPORTE_TOTAL = "SUNAT_JMS_IMPORTE_TOTAL";
     public static final String NUMERO_AUTORIZACION = "SUNAT_JMS_NUMERO_AUTORIZACION";
 
-    public static final String OPERATION = "SUNAT_JMS_OPERATION";
+    public static final String OPERATION_NAME = "SUNAT_JMS_OPERATION";
     public static final String OPERATION_SEND_BILL = "SUNAT_JMS_OPERATION_SEND_BILL";
     public static final String OPERATION_SEND_SUMMARY = "SUNAT_JMS_OPERATION_SEND_SUMMARY";
     public static final String OPERATION_SEND_PACK = "SUNAT_JMS_OPERATION_SEND_PACK";
