@@ -1,7 +1,6 @@
-package io.github.carlosthe19916.wildflyswarm.sender;
+package io.github.carlosthe19916.producers;
 
-import io.github.carlosthe19916.config.*;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
+import io.github.carlosthe19916.qualifiers.JMSunatQueue;
 
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
@@ -22,11 +21,15 @@ public class SenderConfigFactory {
     private Queue queue;
 
     @Produces
-    @BillServiceCpeUrl
-    public String getBillServiceCpeUrl(
-            @ConfigurationValue("io.github.carlosthe19916.ws.billServiceCpeUrl") String billServiceCpeUrl
-    ) {
-        return billServiceCpeUrl;
+    @JMSunatQueue
+    public JMSContext getJMSUnatContext() {
+        return context;
+    }
+
+    @Produces
+    @JMSunatQueue
+    public Queue getJMSunatQueue() {
+        return queue;
     }
 
 }

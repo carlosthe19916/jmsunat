@@ -9,8 +9,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sunat-jms-wildfly-swarm-sender</artifactId>
-    <name>SUNAT JMS Boot Sender</name>
-    <packaging>war</packaging>
+    <name>JMSunat Wildfly-Swarm Sender</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-sender</artifactId>
+            <artifactId>jmsunat-sender-spi</artifactId>
         </dependency>
 
         <dependency>

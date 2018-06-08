@@ -1,9 +1,0 @@
-io:
-  github:
-    carlosthe19916:
-      ws:
-        billServiceCpeUrl: "https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl"
-        billServiceGuiaUrl: "https://e-guiaremision.sunat.gob.pe/ol-ti-itemision-guia-gem/billService?wsdl"
-        billRetentionPerceptionUrl: "https://e-factura.sunat.gob.pe/ol-ti-itemision-otroscpe-gem/billService?wsdl"
-        billConsultService: "https://e-factura.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl"
-        billValidServiceUrl: "https://e-factura.sunat.gob.pe/ol-it-wsconsvalidcpe/billValidService?wsdl"
