@@ -1,8 +1,8 @@
 package io.github.carlosthe19916.jsf.controller;
 
 import io.github.carlosthe19916.config.BillServiceCpeUrl;
-import io.github.carlosthe19916.jms.sender.model.SendConfig;
-import io.github.carlosthe19916.jms.sender.service.BillService;
+import io.github.carlosthe19916.sender.model.SenderConfig;
+import io.github.carlosthe19916.sender.service.BillService;
 
 import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
@@ -25,7 +25,7 @@ public class GetStatusController {
     private String ticket;
 
     public void consultarTicket() throws JMSException {
-        SendConfig sendConfig = new SendConfig.Builder()
+        SenderConfig sendConfig = new SenderConfig.Builder()
                 .endpoint(serviceUrl)
                 .username(username)
                 .password(password)

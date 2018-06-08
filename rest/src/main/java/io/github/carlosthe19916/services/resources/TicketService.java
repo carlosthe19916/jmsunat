@@ -1,7 +1,7 @@
 package io.github.carlosthe19916.services.resources;
 
-import io.github.carlosthe19916.jms.sender.model.SendConfig;
-import io.github.carlosthe19916.jms.sender.service.BillService;
+import io.github.carlosthe19916.sender.model.SenderConfig;
+import io.github.carlosthe19916.sender.service.BillService;
 import io.github.carlosthe19916.services.idm.TicketRepresentation;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ public class TicketService {
     @POST
     @Produces("text/plain")
     public void checkTicket(TicketRepresentation rep) throws JMSException {
-        SendConfig sendConfig = new SendConfig.Builder()
+        SenderConfig sendConfig = new SenderConfig.Builder()
                 .endpoint(rep.getEndpoint())
                 .username(rep.getUsername())
                 .password(rep.getPassword())

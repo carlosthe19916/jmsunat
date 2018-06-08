@@ -70,11 +70,11 @@
 
     <modules>
         <module>core</module>
-        <module>sender</module>
+        <module>sender-spi</module>
         <module>consumer</module>
         <module>rest</module>
         <module>ui</module>
-        <module>wildfly-swarm-config</module>
+        <module>wildfly-swarm</module>
         <module>boot</module>
     </modules>
 

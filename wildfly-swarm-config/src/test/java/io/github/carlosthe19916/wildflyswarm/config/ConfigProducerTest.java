@@ -46,7 +46,7 @@ public class ConfigProducerTest {
         Assert.assertNotNull(url);
         File projectDefaults = new File(url.toURI());
         JAXRSArchive deployment = ShrinkWrap.create(JAXRSArchive.class, "sunat-jms-wildfly-swarm-config.war");
-        deployment.addPackages(true, ConfigProducer.class.getPackage());
+        deployment.addPackages(true, CoreConfigFactory.class.getPackage());
         deployment.setContextRoot("rest");
         deployment.addAsResource(projectDefaults, "/project-defaults.yml");
         deployment.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");

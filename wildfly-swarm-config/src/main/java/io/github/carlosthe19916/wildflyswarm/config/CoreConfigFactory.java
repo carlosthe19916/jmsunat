@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 @ApplicationScoped
-public class ConfigProducer {
+public class CoreConfigFactory {
 
     @Produces
     @BillServiceCpeUrl

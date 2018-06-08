@@ -1,9 +1,9 @@
 package io.github.carlosthe19916.jsf.controller;
 
 import io.github.carlosthe19916.config.BillServiceCpeUrl;
-import io.github.carlosthe19916.jms.sender.model.BillBean;
-import io.github.carlosthe19916.jms.sender.model.SendConfig;
-import io.github.carlosthe19916.jms.sender.service.BillService;
+import io.github.carlosthe19916.sender.model.BillBean;
+import io.github.carlosthe19916.sender.model.SenderConfig;
+import io.github.carlosthe19916.sender.service.BillService;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
@@ -32,7 +32,7 @@ public class BillController {
         byte[] bytes = uploadedFile.getContents();
         String fileName = uploadedFile.getFileName();
 
-        SendConfig sendConfig = new SendConfig.Builder()
+        SenderConfig sendConfig = new SenderConfig.Builder()
                 .endpoint(serviceUrl)
                 .username(username)
                 .password(password)

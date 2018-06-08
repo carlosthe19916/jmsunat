@@ -17,6 +17,10 @@
             <groupId>io.github.carlosthe19916</groupId>
             <artifactId>sunat-jms-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.carlosthe19916</groupId>
+            <artifactId>sunat-jms-sender</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
