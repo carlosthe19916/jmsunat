@@ -75,6 +75,7 @@
         <module>consumer-spi</module>
         <module>ui</module>
         <module>wildfly-swarm</module>
+        <module>distribution</module>
     </modules>
 
     <dependencyManagement>
