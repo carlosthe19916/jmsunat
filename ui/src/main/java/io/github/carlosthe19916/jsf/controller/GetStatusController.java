@@ -13,10 +13,6 @@ import javax.jms.JMSException;
 @Model
 public class GetStatusController {
 
-    public String say() {
-        return "Hello from JSF";
-    }
-
     @Inject
     private BillService billService;
 
@@ -28,22 +24,17 @@ public class GetStatusController {
 
     private String ticket;
 
-    public String consultarTicket() {
+    public void consultarTicket() throws JMSException {
         SendConfig sendConfig = new SendConfig.Builder()
                 .endpoint(serviceUrl)
                 .username(username)
                 .password(password)
                 .build();
 
-//        try {
-//            billService.getStatus(sendConfig, ticket);
-//        } catch (JMSException e) {
-//            e.printStackTrace();
-//        }
+        billService.getStatus(sendConfig, ticket);
 
         FacesMessage message = new FacesMessage("Succesful", "Ticket was sended");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        return "CARLOS ";
     }
 
     // Getters and Setters

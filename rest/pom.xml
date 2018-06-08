@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sunat-jms-rest</artifactId>
-    <name>SUNAT JAX-Rest</name>
+    <name>SUNAT JAX-REST</name>
     <packaging>jar</packaging>
 
     <dependencies>

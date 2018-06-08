@@ -13,3 +13,8 @@ swarm:
       port: 61616
       jndi-name: java:/jms/remote-mq
   remote: true
+io:
+  github:
+    carlosthe19916:
+      ws:
+        billServiceCpeUrl: "https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService"

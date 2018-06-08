@@ -1,6 +1,9 @@
-package io.github.carlosthe19916.jms.consumer;
+package io.github.carlosthe19916.jms.consumer.service;
 
 import io.github.carlosthe19916.config.BillServiceCpeUrl;
+import io.github.carlosthe19916.jms.consumer.model.WSConstants;
+import io.github.carlosthe19916.jms.consumer.utils.Utils;
+import io.github.carlosthe19916.model.Constants;
 import io.github.carlosthe19916.model.UBLDocument;
 import io.github.carlosthe19916.model.UBLDocumentFactory;
 import org.apache.camel.Exchange;
@@ -38,36 +41,54 @@ import java.util.Optional;
 
 @ApplicationScoped
 @ContextName("cdi-camel-context")
-public class SunatRepository extends RouteBuilder {
+public class ConsumerService extends RouteBuilder {
 
-    private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" + pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header.CamelSunatOperation}";
+    private static final String URI_TEMPLATE = "cxf:${header.CamelSunatEndpoint}?serviceClass=" +
+            pe.gob.sunat.service.BillService.class.getName() + "&defaultOperationName=${header." +
+            WSConstants.SUNAT_WS_OPERATION + "}";
 
     @Inject
     @BillServiceCpeUrl
-    private String defaultCamelSunatEndpoint;
+    private String defaultServiceUrl;
 
     @Resource(mappedName = "java:jboss/DefaultJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         JmsComponent jmsComponent = new JmsComponent();
         jmsComponent.setConnectionFactory(connectionFactory);
 
         getContext().addComponent("jms", jmsComponent);
 
-        from("jms:queue:SunatQueue")
+        from("jms:queue:sunat-queue")
                 .choice()
-                    .when(header("CamelSunatEndpoint").isNull())
-                        .setHeader("CamelSunatEndpoint").simple(defaultCamelSunatEndpoint)
+                    .when(header(Constants.SUNAT_JMS_SERVICE_URL).isNull())
+                        .setHeader(Constants.SUNAT_JMS_SERVICE_URL).simple(defaultServiceUrl)
                 .end()
+                .process(this::addWSSESecurityHeader)
                 .choice()
-                    .when(body().isInstanceOf(String.class))
-                        .setHeader("CamelSunatOperation").simple("getStatus")
+                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_GET_STATUS))
+                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_GET_STATUS_OPERATION)
+                        .toD(URI_TEMPLATE)
                         .process(exchange -> {
-                            String ruc = (String) exchange.getIn().getHeader("CamelSunatRuc");
-                            this.addWSSESecurityHeader(exchange, ruc);
+                            Message message = exchange.getIn();
+                            MessageContentsList messageContentsList = (MessageContentsList) message.getBody();
+                            StatusResponse statusResponse = (StatusResponse) messageContentsList.get(0);
+                            message.setBody(statusResponse);
                         })
+                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_BILL))
+                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_BILL_OPERATION)
+                        .toD(URI_TEMPLATE)
+                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_SUMMARY))
+                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_SUMMARY_OPERATION)
+                        .toD(URI_TEMPLATE)
+                    .when(header(Constants.OPERATION).isEqualTo(Constants.OPERATION_SEND_PACK))
+                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_SEND_PACK_OPERATION)
+                        .toD(URI_TEMPLATE)
+
+                    .when(body().isInstanceOf(String.class))
+                        .setHeader(WSConstants.SUNAT_WS_OPERATION).simple(WSConstants.SUNAT_WS_GET_STATUS_OPERATION)
                         .toD(URI_TEMPLATE)
                         .process(exchange -> {
                             Message message = exchange.getIn();
@@ -116,31 +137,27 @@ public class SunatRepository extends RouteBuilder {
                                     Object[] serviceParams = new Object[]{camelFinalName, dataHandler, partyType};
                                     message.setBody(serviceParams);
                                 })
-                                .process(exchange -> {
-                                    String ruc = (String) exchange.getIn().getHeader("CamelSunatRuc");
-                                    this.addWSSESecurityHeader(exchange, ruc);
-                                })
                                 .toD(URI_TEMPLATE)
                         .otherwise()
-                            .log("SunatQueue received invalid message")
+                            .log("sunat-queue received invalid message")
                     .otherwise()
-                        .log("SunatQueue received invalid message")
+                        .log("sunat-queue received invalid message")
                     .end()
         ;
     }
 
-    public void addWSSESecurityHeader(Exchange exchange, String ruc) {
+    private void addWSSESecurityHeader(Exchange exchange) {
         Message message = exchange.getIn();
 
-        String username = (String) message.getHeader("CamelSunatUsername");
-        String password = (String) message.getHeader("CamelSunatPassword");
+        String username = (String) message.getHeader(Constants.SUNAT_USERNAME);
+        String password = (String) message.getHeader(Constants.SUNAT_PASSWORD);
 
         String soapHeader = "" +
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "<wsse:Security xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\"\n" +
                 "               xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\">\n" +
                 "    <wsse:UsernameToken wsu:Id=\"UsernameToken-50\">\n" +
-                "        <wsse:Username>" + ruc + username + "</wsse:Username>\n" +
+                "        <wsse:Username>" + username + "</wsse:Username>\n" +
                 "        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">" + password + "</wsse:Password>\n" +
                 "    </wsse:UsernameToken>\n" +
                 "</wsse:Security>";
@@ -149,7 +166,7 @@ public class SunatRepository extends RouteBuilder {
         addSoapHeader(exchange, soapHeader);
     }
 
-    public void addSoapHeader(Exchange exchange, String soapHeader) {
+    private void addSoapHeader(Exchange exchange, String soapHeader) {
         List<SoapHeader> soapHeaders = CastUtils.cast((List<?>) exchange.getIn().getHeader(Header.HEADER_LIST));
         if (soapHeaders == null) {
             soapHeaders = new ArrayList<>();
@@ -157,7 +174,7 @@ public class SunatRepository extends RouteBuilder {
 
         SoapHeader newHeader;
         try {
-            newHeader = new SoapHeader(new QName("soapHeader"), readXml(new StringReader(soapHeader)).getDocumentElement());
+            newHeader = new SoapHeader(new QName("soapHeader"), Utils.readXml(new StringReader(soapHeader)).getDocumentElement());
             newHeader.setDirection(Header.Direction.DIRECTION_OUT);
 
             soapHeaders.add(newHeader);
@@ -166,28 +183,6 @@ public class SunatRepository extends RouteBuilder {
         } catch (Exception e) {
             //log error
         }
-    }
-
-    /**
-     * This is an exact replica of DOMUtils.createXml()
-     */
-    private static Document readXml(Reader is) throws SAXException, IOException, ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-        dbf.setValidating(false);
-        dbf.setIgnoringComments(false);
-        dbf.setIgnoringElementContentWhitespace(true);
-        dbf.setNamespaceAware(true);
-        // dbf.setCoalescing(true);
-        // dbf.setExpandEntityReferences(true);
-
-        DocumentBuilder db = null;
-        db = dbf.newDocumentBuilder();
-        db.setEntityResolver(new DOMUtils.NullResolver());
-
-        // db.setErrorHandler( new MyErrorHandler());
-        InputSource ips = new InputSource(is);
-        return db.parse(ips);
     }
 
 }
