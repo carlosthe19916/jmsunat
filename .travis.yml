@@ -3,7 +3,7 @@ jdk:
 - oraclejdk8
 addons:
   sonarcloud:
-    organization: carlosthe19916
+    organization: jmsunat
     token:
       secure: $SONAR_TOKEN
 install: mvn install -P !build-extras -DskipTests=true -Dmaven.javadoc.skip=true -B -V
@@ -14,3 +14,6 @@ script:
 cache:
   directories:
   - "~/.m2/repository"
+after_success:
+- "./cd/before-deploy.sh"
+- "./cd/deploy.sh"
