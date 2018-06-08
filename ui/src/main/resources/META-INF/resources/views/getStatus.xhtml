@@ -12,6 +12,8 @@
 
                 <p:growl id="messages" showDetail="true"/>
 
+                <h:outputText value="#{getStatusController.say()}"/>
+
                 <h:form>
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel for="defaultEndpoint" value="Default serviceUrl: "/>
