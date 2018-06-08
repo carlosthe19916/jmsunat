@@ -71,6 +71,7 @@
     <modules>
         <module>core</module>
         <module>sender-spi</module>
+        <module>consumer-spi</module>
         <module>wildfly-swarm</module>
     </modules>
 
@@ -92,6 +93,11 @@
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
                 <artifactId>jmsunat-sender-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.carlosthe19916</groupId>
+                <artifactId>jmsunat-consumer-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--<dependency>-->

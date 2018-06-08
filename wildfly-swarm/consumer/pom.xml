@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>io.github.carlosthe19916</groupId>
+        <artifactId>jmsunat</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sunat-jms-wildfly-swarm-consumer</artifactId>
+    <name>JMSunat Wildfly-Swarm Consumer</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>cdi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>messaging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-cdi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-cxf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>camel-zipfile</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.carlosthe19916</groupId>
+            <artifactId>jmsunat-consumer-spi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>arquillian</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
