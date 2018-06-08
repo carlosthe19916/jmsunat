@@ -13,8 +13,8 @@
 
     <modules>
         <module>broker</module>
+        <module>sender</module>
         <!--<module>consumer</module>-->
-        <!--<module>sender</module>-->
         <!--<module>all-in-one</module>-->
     </modules>
 

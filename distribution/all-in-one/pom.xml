@@ -15,112 +15,24 @@
     <dependencies>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>cdi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>messaging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>remoting</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>ejb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>ejb-remote</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jsf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-cdi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-cxf</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>camel-zipfile</artifactId>
+            <artifactId>microprofile</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-sender</artifactId>
+            <artifactId>jmsunat-ui</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-consumer</artifactId>
+            <artifactId>jmsunat-sender-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-rest</artifactId>
+            <artifactId>jmsunat-consumer-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-ui</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-wildfly-swarm-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-client</artifactId>
-            <version>${version.resteasy}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>arquillian</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>${version.restassured}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${version.awaitility}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.arquillian.cube</groupId>
-            <artifactId>arquillian-cube-openshift</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.undertow</groupId>
-                    <artifactId>undertow-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>sunat-jms-wildfly-swarm-sender</artifactId>
         </dependency>
     </dependencies>
 

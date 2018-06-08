@@ -108,11 +108,11 @@
                 <artifactId>jmsunat-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--<dependency>-->
-            <!--<groupId>io.github.carlosthe19916</groupId>-->
-            <!--<artifactId>sunat-jms-consumer</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>io.github.carlosthe19916</groupId>
+                <artifactId>sunat-jms-wildfly-swarm-sender</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--<dependency>-->
             <!--<groupId>io.github.carlosthe19916</groupId>-->
             <!--<artifactId>sunat-jms-wildfly-swarm-config</artifactId>-->
