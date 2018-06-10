@@ -6,7 +6,7 @@ spec:
   replicas: 1
   strategy:
     rollingParams:
-      timeoutSeconds: 10800
+      timeoutSeconds: 3600
     type: Rolling
   template:
     spec:
@@ -18,10 +18,8 @@ spec:
               fieldPath: metadata.namespace
         - name: JAVA_APP_DIR
           value: /deployments
-        - name: SSO_AUTH_SERVER_URL
-          value: ${SSO_AUTH_SERVER_URL}
         - name: JAVA_OPTIONS
-          value: -Djava.net.preferIPv4Stack=true -Dswarm.bind.address=127.0.0.1
+          value: -Dsso.auth.server.url=carlos
         - name: GC_MAX_METASPACE_SIZE
           value: 250
         name: ${project.artifactId}
