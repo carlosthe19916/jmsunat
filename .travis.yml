@@ -3,7 +3,7 @@ jdk:
 - oraclejdk8
 addons:
   sonarcloud:
-    organization: jmsunat
+    organization: sunat-jms
     token:
       secure: $SONAR_TOKEN
 install: mvn install -P !build-extras -DskipTests=true -Dmaven.javadoc.skip=true -B -V

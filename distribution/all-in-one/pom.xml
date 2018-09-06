@@ -20,15 +20,15 @@
 
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>jmsunat-ui</artifactId>
+            <artifactId>sunat-jms-ui</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>jmsunat-sender-spi</artifactId>
+            <artifactId>sunat-jms-sender-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>jmsunat-consumer-spi</artifactId>
+            <artifactId>sunat-jms-consumer-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>

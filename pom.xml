@@ -9,11 +9,11 @@
     </parent>
 
     <groupId>io.github.carlosthe19916</groupId>
-    <artifactId>jmsunat</artifactId>
+    <artifactId>sunat-jms</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JMSunat</name>
+    <name>SUNAT - JMS</name>
     <description>JMS for SUNAT</description>
 
     <properties>
@@ -53,9 +53,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/carlosthe19916/jmsunat.git</connection>
-        <developerConnection>scm:git:git@github.com:carlosthe19916/jmsunat.git</developerConnection>
-        <url>https://github.com/carlosthe19916/jmsunat/tree/master/</url>
+        <connection>scm:git:git://github.com/carlosthe19916/sunat-jms.git</connection>
+        <developerConnection>scm:git:git@github.com:carlosthe19916/sunat-jms.git</developerConnection>
+        <url>https://github.com/carlosthe19916/sunat-jms/tree/master/</url>
     </scm>
 
     <distributionManagement>
@@ -90,22 +90,22 @@
 
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>jmsunat-core</artifactId>
+                <artifactId>sunat-jms-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>jmsunat-sender-spi</artifactId>
+                <artifactId>sunat-jms-sender-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>jmsunat-consumer-spi</artifactId>
+                <artifactId>sunat-jms-consumer-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>jmsunat-ui</artifactId>
+                <artifactId>sunat-jms-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
