@@ -8,11 +8,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sunat-jms-core</artifactId>
-    <name>JMSunat Core</name>
+    <artifactId>sunat-jms-sender-jee</artifactId>
+    <name>SUNAT - JMS Sender Java EE</name>
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.carlosthe19916</groupId>
+            <artifactId>sunat-jms-sender-spi</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

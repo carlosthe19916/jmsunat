@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sunat-jms-sender-spi</artifactId>
-    <name>JMSunat Sender Spi</name>
+    <name>SUNAT - JMS Sender Spi</name>
     <packaging>jar</packaging>
 
     <dependencies>

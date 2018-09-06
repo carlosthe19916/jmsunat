@@ -1,11 +1,11 @@
-package io.github.carlosthe19916.wildflyswarm.sender.service;
+package io.github.carlosthe19916.sender.javaee.service;
 
-import io.github.carlosthe19916.wildflyswarm.sender.qualifiers.JMSunatContext;
-import io.github.carlosthe19916.wildflyswarm.sender.qualifiers.JMSunatQueue;
+import io.github.carlosthe19916.sender.javaee.qualifiers.JMSunatContext;
+import io.github.carlosthe19916.sender.javaee.qualifiers.JMSunatQueue;
 import io.github.carlosthe19916.sender.model.JMSBillValidMessageBean;
 import io.github.carlosthe19916.sender.model.JMSSenderConfig;
-import io.github.carlosthe19916.sender.model.SenderConstants;
 import io.github.carlosthe19916.sender.service.JMSBillValidService;
+import io.github.carlosthe19916.util.SenderConstants;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -35,11 +35,11 @@ public class DefaultBillValidService implements JMSBillValidService {
         message.setDouble(SenderConstants.IMPORTE_TOTAL, bean.getImporteTotal());
         message.setString(SenderConstants.NUMERO_AUTORIZACION, bean.getNroAutorizacion());
 
-        message.setStringProperty(SenderConstants.DESTINY, config.getEndpoint());
-        message.setStringProperty(SenderConstants.DESTINY_OPERATION, SenderConstants.GET_STATUS_CDR);
+        message.setStringProperty(SenderConstants.WS_URL, config.getEndpoint());
+        message.setStringProperty(SenderConstants.WS_OPERATION, SenderConstants.GET_STATUS_CDR);
 
-        message.setStringProperty(SenderConstants.SENDER_USERNAME, config.getUsername());
-        message.setStringProperty(SenderConstants.SENDER_PASSWORD, config.getPassword());
+        message.setStringProperty(SenderConstants.SUNAT_USERNAME, config.getUsername());
+        message.setStringProperty(SenderConstants.SUNAT_PASSWORD, config.getPassword());
 
         JMSProducer producer = context.createProducer();
         producer.send(queue, message);

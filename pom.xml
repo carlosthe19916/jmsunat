@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <version.wildfly.swarm>2018.4.1</version.wildfly.swarm>
+        <version.wildfly.swarm>2.1.0.Final</version.wildfly.swarm>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -72,22 +72,14 @@
     <modules>
         <module>core</module>
         <module>sender-spi</module>
-        <module>consumer-spi</module>
-        <module>ui</module>
-        <module>wildfly-swarm</module>
-        <module>distribution</module>
+        <module>sender-jee</module>
+        <module>sender-client</module>
+        <!--<module>consumer-spi</module>-->
+        <!--<module>distribution</module>-->
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.wildfly.swarm</groupId>
-                <artifactId>bom</artifactId>
-                <version>${version.wildfly.swarm}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
                 <artifactId>sunat-jms-core</artifactId>
@@ -96,6 +88,11 @@
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
                 <artifactId>sunat-jms-sender-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.carlosthe19916</groupId>
+                <artifactId>sunat-jms-sender-jee</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

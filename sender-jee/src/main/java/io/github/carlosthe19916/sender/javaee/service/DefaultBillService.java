@@ -1,11 +1,11 @@
-package io.github.carlosthe19916.wildflyswarm.sender.service;
+package io.github.carlosthe19916.sender.javaee.service;
 
-import io.github.carlosthe19916.wildflyswarm.sender.qualifiers.JMSunatContext;
-import io.github.carlosthe19916.wildflyswarm.sender.qualifiers.JMSunatQueue;
+import io.github.carlosthe19916.sender.javaee.qualifiers.JMSunatContext;
+import io.github.carlosthe19916.sender.javaee.qualifiers.JMSunatQueue;
 import io.github.carlosthe19916.sender.model.JMSBillMessageBean;
 import io.github.carlosthe19916.sender.model.JMSSenderConfig;
-import io.github.carlosthe19916.sender.model.SenderConstants;
 import io.github.carlosthe19916.sender.service.JMSBillService;
+import io.github.carlosthe19916.util.SenderConstants;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,11 +32,11 @@ public class DefaultBillService implements JMSBillService {
         TextMessage message = context.createTextMessage();
         message.setText(ticket);
 
-        message.setStringProperty(SenderConstants.DESTINY, config.getEndpoint());
-        message.setStringProperty(SenderConstants.DESTINY_OPERATION, SenderConstants.GET_STATUS);
+        message.setStringProperty(SenderConstants.WS_URL, config.getEndpoint());
+        message.setStringProperty(SenderConstants.WS_OPERATION, SenderConstants.GET_STATUS);
 
-        message.setStringProperty(SenderConstants.SENDER_USERNAME, config.getUsername());
-        message.setStringProperty(SenderConstants.SENDER_PASSWORD, config.getPassword());
+        message.setStringProperty(SenderConstants.SUNAT_USERNAME, config.getUsername());
+        message.setStringProperty(SenderConstants.SUNAT_PASSWORD, config.getPassword());
 
         JMSProducer producer = context.createProducer();
         producer.send(queue, message);
@@ -56,11 +56,11 @@ public class DefaultBillService implements JMSBillService {
         BytesMessage message = context.createBytesMessage();
         message.writeBytes(bean.getContentFile());
 
-        message.setStringProperty(SenderConstants.DESTINY, config.getEndpoint());
-        message.setStringProperty(SenderConstants.DESTINY_OPERATION, operation);
+        message.setStringProperty(SenderConstants.WS_URL, config.getEndpoint());
+        message.setStringProperty(SenderConstants.WS_OPERATION, operation);
 
-        message.setStringProperty(SenderConstants.SENDER_USERNAME, config.getUsername());
-        message.setStringProperty(SenderConstants.SENDER_PASSWORD, config.getPassword());
+        message.setStringProperty(SenderConstants.SUNAT_USERNAME, config.getUsername());
+        message.setStringProperty(SenderConstants.SUNAT_PASSWORD, config.getPassword());
 
         message.setStringProperty(SenderConstants.FILE_NAME, bean.getFileName());
         message.setStringProperty(SenderConstants.PARTY_TYPE, bean.getPartyType());
