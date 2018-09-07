@@ -17,10 +17,6 @@ swarm:
             user: admin
             password: admin
             entries:
-              entry: "java:/jms/RemoteArtemisCF"
+              - "java:/jms/RemoteArtemisCF"
             connectors:
-              connector: remote-artemis
-        jms-queues:
-          exampleQueue:
-            entries:
-              entry: "java:/exampleQueue"
+              - remote-artemis
