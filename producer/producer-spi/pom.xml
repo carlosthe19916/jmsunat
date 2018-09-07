@@ -1,18 +1,21 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>io.github.carlosthe19916</groupId>
         <artifactId>sunat-jms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Distribution</name>
-    <artifactId>sunat-jms-distribution</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>sunat-jms-producer-spi</artifactId>
+    <name>Producer Spi</name>
+    <packaging>jar</packaging>
 
-    <modules>
-        <module>producer-client</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>io.github.carlosthe19916</groupId>
+            <artifactId>sunat-jms-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>

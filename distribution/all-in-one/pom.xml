@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-sender-spi</artifactId>
+            <artifactId>sunat-jms-producer-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>

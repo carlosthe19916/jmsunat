@@ -1,0 +1,22 @@
+swarm:
+  network:
+    socket-binding-groups:
+      standard-sockets:
+        outbound-socket-bindings:
+          remote-artemis:
+            remote-host: localhost
+            remote-port: 61616
+  messaging-activemq:
+    servers:
+      default:
+        remote-connectors:
+          remote-artemis:
+            socket-binding: remote-artemis
+        pooled-connection-factories:
+          remote-artemis:
+            user: admin
+            password: admin
+            entries:
+              entry: "java:/jms/example-mq"
+            connectors:
+              connector: remote-artemis

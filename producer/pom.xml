@@ -7,12 +7,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Distribution</name>
-    <artifactId>sunat-jms-distribution</artifactId>
+    <name>Producer</name>
+    <description/>
+
+    <artifactId>sunat-jms-producer</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>producer-client</module>
+        <module>producer-spi</module>
+        <module>producer-jee</module>
     </modules>
-
 </project>
