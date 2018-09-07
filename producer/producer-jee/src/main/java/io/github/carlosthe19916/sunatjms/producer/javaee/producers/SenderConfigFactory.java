@@ -15,10 +15,10 @@ import javax.jms.Queue;
 public class SenderConfigFactory {
 
     @Inject
-    @JMSConnectionFactory("java:/jms/example-mq")
+    @JMSConnectionFactory("java:/jms/RemoteArtemisCF")
     private JMSContext context;
 
-    @Resource(mappedName = "java:/exampleQueue")
+    @Resource(lookup = "java:/exampleQueue")
     private Queue queue;
 
     @Produces

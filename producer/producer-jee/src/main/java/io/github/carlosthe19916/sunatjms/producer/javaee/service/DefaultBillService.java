@@ -32,6 +32,7 @@ public class DefaultBillService implements JMSBillService {
     public void getStatus(JMSSenderConfig config, String ticket) throws JMSException {
         TextMessage message = context.createTextMessage();
         message.setText(ticket);
+        message.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
 
         message.setStringProperty(SenderConstants.WS_URL, config.getEndpoint());
         message.setStringProperty(SenderConstants.WS_OPERATION, SenderConstants.GET_STATUS);
@@ -56,6 +57,7 @@ public class DefaultBillService implements JMSBillService {
     private void sendFile(JMSSenderConfig config, JMSBillMessageBean bean, String operation) throws JMSException {
         BytesMessage message = context.createBytesMessage();
         message.writeBytes(bean.getContentFile());
+        message.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
 
         message.setStringProperty(SenderConstants.WS_URL, config.getEndpoint());
         message.setStringProperty(SenderConstants.WS_OPERATION, operation);
