@@ -7,13 +7,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Distribution</name>
-    <artifactId>sunat-jms-distribution</artifactId>
+    <name>Consumer</name>
+    <description/>
+
+    <artifactId>sunat-jms-consumer</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>producer-client</module>
-        <module>consumer-client</module>
+        <module>consumer-spi</module>
+        <module>consumer-jee</module>
     </modules>
-
 </project>

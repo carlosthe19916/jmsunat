@@ -72,6 +72,7 @@
     <modules>
         <module>core</module>
         <module>producer</module>
+        <module>consumer</module>
         <module>distribution</module>
     </modules>
 
@@ -99,19 +100,9 @@
             </dependency>
             <dependency>
                 <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-ui</artifactId>
+                <artifactId>sunat-jms-consumer-jee</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.github.carlosthe19916</groupId>
-                <artifactId>sunat-jms-wildfly-swarm-sender</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!--<dependency>-->
-            <!--<groupId>io.github.carlosthe19916</groupId>-->
-            <!--<artifactId>sunat-jms-wildfly-swarm-config</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--</dependency>-->
         </dependencies>
     </dependencyManagement>
 

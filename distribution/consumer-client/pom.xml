@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sunat-jms-producer-client</artifactId>
-    <name>Distribution Producer Client</name>
+    <artifactId>sunat-jms-consumer-client</artifactId>
+    <name>Distribution Consumer Client</name>
     <packaging>war</packaging>
 
     <properties>
@@ -38,25 +38,16 @@
             <groupId>io.thorntail</groupId>
             <artifactId>messaging</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.thorntail</groupId>
-            <artifactId>jsf</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-producer-spi</artifactId>
+            <artifactId>sunat-jms-consumer-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
-            <artifactId>sunat-jms-producer-jee</artifactId>
+            <artifactId>sunat-jms-consumer-jee</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>${primefaces.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-jms-client</artifactId>

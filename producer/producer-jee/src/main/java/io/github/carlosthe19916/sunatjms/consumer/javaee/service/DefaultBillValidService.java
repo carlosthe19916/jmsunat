@@ -1,4 +1,4 @@
-package io.github.carlosthe19916.sunatjms.producer.javaee.service;
+package io.github.carlosthe19916.sunatjms.consumer.javaee.service;
 
 import io.github.carlosthe19916.sunatjms.producer.model.JMSBillValidMessageBean;
 import io.github.carlosthe19916.sunatjms.producer.model.JMSSenderConfig;
