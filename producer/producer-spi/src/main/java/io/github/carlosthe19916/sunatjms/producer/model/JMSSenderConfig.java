@@ -12,6 +12,10 @@ public class JMSSenderConfig {
         this.password = builder.password;
     }
 
+    public static JMSSenderConfig.Builder builder() {
+    	return new Builder();
+    }
+    
     public String getEndpoint() {
         return endpoint;
     }

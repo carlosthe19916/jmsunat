@@ -17,5 +17,11 @@
             <groupId>io.github.carlosthe19916</groupId>
             <artifactId>sunat-jms-core</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>            
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
