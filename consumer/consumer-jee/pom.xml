@@ -24,7 +24,7 @@
             <version>3.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jboss.ejb3/jboss-ejb3-ext-api -->
+
         <dependency>
             <groupId>org.jboss.ejb3</groupId>
             <artifactId>jboss-ejb3-ext-api</artifactId>

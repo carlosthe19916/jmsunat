@@ -3,20 +3,20 @@ swarm:
     socket-binding-groups:
       standard-sockets:
         outbound-socket-bindings:
-          remote-artemis:
+          remote-artemis-socket-binding:
             remote-host: localhost
             remote-port: 61616
   messaging-activemq:
     servers:
       default:
         remote-connectors:
-          remote-artemis:
-            socket-binding: remote-artemis
+          remote-artemis-connector:
+            socket-binding: remote-artemis-socket-binding
         pooled-connection-factories:
-          remote-artemis:
+          remote-artemis-connection-factory:
             user: admin
             password: admin
             entries:
-              - "java:/jms/RemoteArtemisCF"
+            - "java:/jms/RemoteArtemisCF"
             connectors:
-              - remote-artemis
+            - remote-artemis-connector
