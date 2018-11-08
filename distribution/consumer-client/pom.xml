@@ -42,6 +42,10 @@
             <groupId>io.thorntail</groupId>
             <artifactId>messaging</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>webservices</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>

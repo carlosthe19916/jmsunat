@@ -40,8 +40,19 @@ public class DefaultBillService implements JMSBillService {
         message.setStringProperty(SenderConstants.SUNAT_USERNAME, config.getUsername());
         message.setStringProperty(SenderConstants.SUNAT_PASSWORD, config.getPassword());
 
+
+        TemporaryQueue temporaryQueue = context.createTemporaryQueue();
+        message.setJMSReplyTo(temporaryQueue);
+
+        JMSConsumer temporaryConsumer = context.createConsumer(temporaryQueue);
+
         JMSProducer producer = context.createProducer();
         producer.send(queue, message);
+
+        Message receive = temporaryConsumer.receive();
+        System.out.println(receive);
+        System.out.println(receive);
+        System.out.println(receive);
     }
 
     @Override

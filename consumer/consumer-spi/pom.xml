@@ -15,6 +15,11 @@
     <dependencies>
         <dependency>
             <groupId>io.github.carlosthe19916</groupId>
+            <artifactId>sunat-web-services</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.carlosthe19916</groupId>
             <artifactId>sunat-jms-core</artifactId>
         </dependency>
     </dependencies>
